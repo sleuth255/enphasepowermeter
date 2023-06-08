@@ -1,11 +1,10 @@
 /**
  *  Enphase Solar Array Power Meter for Hubitat
- *  Sleuth255
  *  Uses the local enphase envoy API
  */
 
 metadata {
-    definition (name: "Enphase Solar Array PowerMeter", namespace: "sleuth255", author: "Kevin Wilcox") {
+    definition (name: "Enphase Solar Array PowerMeter", namespace: "sleuth255", author: "Sleuth255") {
         capability "PowerMeter"
         capability "Sensor"
         capability "PushableButton"
