@@ -10,6 +10,7 @@ metadata {
         capability "PushableButton"
         attribute "numberOfButtons","1"
         attribute "power","0"
+	attribute "maxtoday","0"
 	}
 }
 
@@ -30,7 +31,10 @@ def initialize() {
 		if(logEnable) log.debug "requesting array LiveData"
         httpGet(ApiUrl) { resp ->
             if (resp.success) {
-                def Integer maxToday = (device.currentValue("maxtoday")).toInteger();
+                if (device.currentValue("maxtoday") == null)
+                    def Integer maxToday = 0;
+                else    
+                    def Integer maxToday = (device.currentValue("maxtoday")).toInteger();
                 def Integer power = resp.data.production.wNow[1];
                 if (power > maxToday)
                     sendEvent(name: "maxtoday", value: power, isStateChange: true);
