@@ -30,13 +30,19 @@ def initialize() {
 		if(logEnable) log.debug "requesting array LiveData"
         httpGet(ApiUrl) { resp ->
             if (resp.success) {
+                def Integer maxToday = (device.currentValue("maxtoday")).toInteger();
                 def Integer power = resp.data.production.wNow[1];
+                if (power > maxToday)
+                    sendEvent(name: "maxtoday", value: power, isStateChange: true);
+                else
+                if (power < 0 && maxToday > 0)
+                    sendEvent(name: "maxtoday", value: 0, isStateChange: true);
                 sendEvent(name: "power", value: power, isStateChange: true);
                 if (logEnable) {
                       log.debug("response received: ${power}");
-			    }
+                }
             }
-            else
+           else
                 sendEvent(name: "power", value: "Offline", isStateChange: true);
         }
     } catch(e) {
@@ -58,11 +64,17 @@ def push(nbr){
 		if(logEnable) log.debug "requesting array LiveData"
         httpGet(ApiUrl) { resp ->
             if (resp.success) {
+                def Integer maxToday = (device.currentValue("maxtoday")).toInteger();
                 def Integer power = resp.data.production.wNow[1];
+                if (power > maxToday)
+                    sendEvent(name: "maxtoday", value: power, isStateChange: true);
+                else
+                if (power < 0 && maxToday > 0)
+                    sendEvent(name: "maxtoday", value: 0, isStateChange: true);
                 sendEvent(name: "power", value: power, isStateChange: true);
                 if (logEnable) {
                       log.debug("response received: ${power}");
-			    }
+	        }
             }
             else
                 sendEvent(name: "power", value: "Offline", isStateChange: true);
