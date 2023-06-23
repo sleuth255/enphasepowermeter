@@ -11,6 +11,7 @@ metadata {
         attribute "numberOfButtons","1"
         attribute "power","0"
 	attribute "maxtoday","0"
+        attribute "kwhToday","0"
 	}
 }
 
@@ -36,12 +37,14 @@ def initialize() {
                 else    
                     def Integer maxToday = (device.currentValue("maxtoday")).toInteger();
                 def Integer power = resp.data.production.wNow[1];
+                def whtoday = (resp.data.production.whToday[1]).toInteger() / 1000;
                 if (power > maxToday)
                     sendEvent(name: "maxtoday", value: power, isStateChange: true);
                 else
                 if (power < 0 && maxToday > 0)
                     sendEvent(name: "maxtoday", value: 0, isStateChange: true);
                 sendEvent(name: "power", value: power, isStateChange: true);
+                sendEvent(name: "kwhToday", value: whtoday, isStateChange: true);
                 if (logEnable) {
                       log.debug("response received: ${power}");
                 }
@@ -70,12 +73,14 @@ def push(nbr){
             if (resp.success) {
                 def Integer maxToday = (device.currentValue("maxtoday")).toInteger();
                 def Integer power = resp.data.production.wNow[1];
+                def whtoday = (resp.data.production.whToday[1]).toInteger() / 1000;
                 if (power > maxToday)
                     sendEvent(name: "maxtoday", value: power, isStateChange: true);
                 else
                 if (power < 0 && maxToday > 0)
                     sendEvent(name: "maxtoday", value: 0, isStateChange: true);
                 sendEvent(name: "power", value: power, isStateChange: true);
+                sendEvent(name: "kwhToday", value: whtoday, isStateChange: true);
                 if (logEnable) {
                       log.debug("response received: ${power}");
 	        }
